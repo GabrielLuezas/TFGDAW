@@ -1,0 +1,6 @@
+name: MinecraftManagerPlugin
+version: ${project.version}
+main: com.tfg.minecraftmanager.MinecraftManagerPlugin
+api-version: 1.21
+authors: [TuNombre]
+description: Plugin para TFG Minecraft Manager

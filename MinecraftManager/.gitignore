@@ -1,0 +1,32 @@
+# --- Node.js (Backend y Frontend) ---
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json # Opcional: Hay gente que lo sube, pero si quieres ahorrar conflictos, puedes ignorarlo. Lo estándar es subirlo.
+.DS_Store
+
+# --- Seguridad (IMPORTANTE) ---
+# Nunca subas tus claves API o contraseñas de BBDD
+.env
+.env.local
+.env.*.local
+
+# --- Frontend (Vite/Builds) ---
+# Ignoramos la carpeta "dist" porque se genera sola al desplegar
+dist/
+dist-ssr/
+*.local
+
+# --- Java / Plugin Minecraft ---
+# Ignoramos los archivos compilados de Java
+target/
+*.class
+*.log
+*.jar
+# Si usas IntelliJ o Eclipse
+.idea/
+*.iml
+.vscode/
+
+# --- Otros ---
+coverage/
