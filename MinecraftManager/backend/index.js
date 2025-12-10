@@ -6,9 +6,12 @@ const { Server } = require("socket.io");
 const WebSocket = require("ws");
 
 const app = express();
-const PORT = 3000;
-const PLUGIN_API_URL = "http://localhost:8081/api";
-const PLUGIN_WS_URL = "ws://localhost:8082";
+// El puerto TIENE que ser el que diga Render (process.env.PORT) o fallará el despliegue
+const PORT = process.env.PORT || 3000;
+
+// Aquí le decimos: "Usa la variable de Render, y si no existe (estoy en mi PC), usa localhost"
+const PLUGIN_API_URL = process.env.PLUGIN_API_URL || "http://localhost:8081/api";
+const PLUGIN_WS_URL = process.env.PLUGIN_WS_URL || "ws://localhost:8082";
 
 app.use(cors());
 app.use(express.json());
