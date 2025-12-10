@@ -1,0 +1,5 @@
+# Configuración del MinecraftManager
+# Pon aquí los puertos que te dio FalixNodes (Add Port)
+
+api-port: 21779
+websocket-port: 52668

@@ -28,21 +28,27 @@ public class MinecraftManagerPlugin extends JavaPlugin implements Listener {
     private HttpServer server;
     private ChatWebSocketServer wsServer;
     private final Gson gson = new Gson();
-    private static final int PORT = 8081; // HTTP Port
-    private static final int WS_PORT = 8082; // WebSocket Port
+    // private static final int PORT = 8081; // HTTP Port
+    // private static final int WS_PORT = 8082; // WebSocket Port
 
     @Override
     public void onEnable() {
-        getLogger().info("Starting MinecraftManager API on port " + PORT);
+        saveDefaultConfig(); // <--- IMPORTANTE: Esto crea el archivo config.yml en la carpeta del server
+
+        // 2. Leer los puertos del archivo config.yml
+        int apiPort = getConfig().getInt("api-port", 8081);
+        int wsPort = getConfig().getInt("websocket-port", 8082);
+
+        getLogger().info("Starting MinecraftManager API on port " + apiPort);
         getServer().getPluginManager().registerEvents(this, this);
 
         // Start WebSocket Server
-        wsServer = new ChatWebSocketServer(new InetSocketAddress(WS_PORT));
+        wsServer = new ChatWebSocketServer(new InetSocketAddress(wsPort));
         wsServer.start();
-        getLogger().info("WebSocket Server started on port " + WS_PORT);
+        getLogger().info("WebSocket Server started on port " + wsPort);
 
         try {
-            server = HttpServer.create(new InetSocketAddress(PORT), 0);
+            server = HttpServer.create(new InetSocketAddress(apiPort), 0);
 
             // Endpoint: /api/players
             server.createContext("/api/players", new HttpHandler() {
