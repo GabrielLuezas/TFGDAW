@@ -1,0 +1,149 @@
+<div class="h-full flex flex-col p-8 relative">
+  <div class="flex justify-between items-center mb-8">
+    <h2 class="text-4xl font-serif text-white">Inventario</h2>
+    <select class="bg-[#E5E7EB] text-black px-4 py-2 rounded outline-none focus:ring-2 focus:ring-[#D946EF]"
+            [(ngModel)]="selectedPlayer"
+            (ngModelChange)="onPlayerChange()">
+      <option [ngValue]="null" disabled>Seleccionar Jugador</option>
+      @for (p of players; track p.uuid) {
+        <option [ngValue]="p.uuid">{{ p.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading) {
+    <div class="text-center mt-20 text-gray-400">Cargando inventario...</div>
+  } @else {
+    <div class="flex-1 flex gap-8 overflow-hidden">
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col items-center gap-12 overflow-auto pr-4">
+        <!-- Top: Armor + Main Inventory -->
+        <div class="flex gap-8">
+          <!-- Armor Slots -->
+          <div class="flex flex-col gap-2 p-2 mc-container">
+            @for (slot of [39, 38, 37, 36]; track slot) {
+              <div class="slot"
+                   (mouseenter)="onSlotHover($event, getSlotItem(inventory, slot))"
+                   (mouseleave)="onSlotLeave()">
+                @if (getSlotItem(inventory, slot); as item) {
+                  <img [src]="textureService.getTextureUrl(item.type)" [alt]="item.type" class="slot-icon pixelated" />
+                  @if (item.amount > 1) {
+                    <span class="slot-count">{{ item.amount }}</span>
+                  }
+                }
+              </div>
+            }
+            <div class="mt-2">
+              <div class="slot"
+                   (mouseenter)="onSlotHover($event, getSlotItem(inventory, 40))"
+                   (mouseleave)="onSlotLeave()">
+                @if (getSlotItem(inventory, 40); as item) {
+                  <img [src]="textureService.getTextureUrl(item.type)" [alt]="item.type" class="slot-icon pixelated" />
+                  @if (item.amount > 1) {
+                    <span class="slot-count">{{ item.amount }}</span>
+                  }
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Grid -->
+          <div class="p-2 mc-container">
+            <div class="grid grid-cols-9 gap-1 mb-4">
+              @for (slot of getSlotRange(9, 36); track slot) {
+                <div class="slot"
+                     (mouseenter)="onSlotHover($event, getSlotItem(inventory, slot))"
+                     (mouseleave)="onSlotLeave()">
+                  @if (getSlotItem(inventory, slot); as item) {
+                    <img [src]="textureService.getTextureUrl(item.type)" [alt]="item.type" class="slot-icon pixelated" />
+                    @if (item.amount > 1) {
+                      <span class="slot-count">{{ item.amount }}</span>
+                    }
+                  }
+                </div>
+              }
+            </div>
+            <div class="grid grid-cols-9 gap-1">
+              @for (slot of getSlotRange(0, 9); track slot) {
+                <div class="slot"
+                     (mouseenter)="onSlotHover($event, getSlotItem(inventory, slot))"
+                     (mouseleave)="onSlotLeave()">
+                  @if (getSlotItem(inventory, slot); as item) {
+                    <img [src]="textureService.getTextureUrl(item.type)" [alt]="item.type" class="slot-icon pixelated" />
+                    @if (item.amount > 1) {
+                      <span class="slot-count">{{ item.amount }}</span>
+                    }
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Ender Chest -->
+        <div class="flex flex-col items-center">
+          <h3 class="text-2xl font-serif text-white mb-4">Ender Chest</h3>
+          <div class="p-2 mc-container">
+            <div class="grid grid-cols-9 gap-1">
+              @for (slot of getSlotRange(0, 27); track slot) {
+                <div class="slot"
+                     (mouseenter)="onSlotHover($event, getSlotItem(enderChest, slot))"
+                     (mouseleave)="onSlotLeave()">
+                  @if (getSlotItem(enderChest, slot); as item) {
+                    <img [src]="textureService.getTextureUrl(item.type)" [alt]="item.type" class="slot-icon pixelated" />
+                    @if (item.amount > 1) {
+                      <span class="slot-count">{{ item.amount }}</span>
+                    }
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Potion Effects Sidebar -->
+      <div class="w-72 mc-container p-4 flex flex-col gap-4 overflow-auto h-fit max-h-full">
+        <h3 class="text-xl font-bold text-[#3f3f3f] border-b-2 border-[#9e9e9e] pb-2 mb-2">Efectos Activos</h3>
+        @if (potionEffects.length === 0) {
+          <p class="text-[#3f3f3f] italic">Sin efectos</p>
+        } @else {
+          @for (effect of potionEffects; track $index) {
+            <div class="flex items-center gap-3 bg-[#8b8b8b]/20 p-2 rounded border border-[#555]">
+              <img [src]="getPotionIconUrl(effect.type)"
+                   [alt]="getPotionName(effect.type)"
+                   class="w-8 h-8 pixelated"
+                   (error)="$any($event.target).style.display='none'" />
+              <div>
+                <p class="font-bold text-[#3f3f3f] capitalize">
+                  {{ getPotionName(effect.type) }} {{ toRoman(effect.amplifier + 1) }}
+                </p>
+                <p class="text-sm text-[#3f3f3f]">{{ formatDuration(effect.duration) }}</p>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Tooltip -->
+  @if (hoveredItem) {
+    <div class="fixed z-[9999] pointer-events-none bg-[#111827] text-white text-xs p-3 rounded border-2 border-[#2C2F66] shadow-xl min-w-[150px]"
+         [style.left.px]="tooltipPos.x"
+         [style.top.px]="tooltipPos.y"
+         style="transform: translate(-50%, -100%) translateY(-10px)">
+      <p class="font-bold text-[#31AF7C] text-sm mb-1 capitalize">{{ formatItemName(hoveredItem.type) }}</p>
+      @if (hoveredItem.enchantments && hoveredItem.enchantments.length > 0) {
+        <div class="mb-2 space-y-0.5">
+          @for (ench of hoveredItem.enchantments; track $index) {
+            <p class="text-[#D946EF] font-medium">
+              {{ formatEnchantName(ench.name) }} {{ ench.level }}
+            </p>
+          }
+        </div>
+      }
+      <p class="text-gray-400">Count: {{ hoveredItem.amount }}</p>
+    </div>
+  }
+</div>

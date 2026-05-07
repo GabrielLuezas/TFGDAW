@@ -1,0 +1,278 @@
+/* ============================================================
+   MinecraftManager — Global Minecraft Theme
+   Font: Press Start 2P (pixel font)
+   Paleta: tierra, piedra, obsidiana, esmeralda, redstone
+   ============================================================ */
+
+@import "tailwindcss";
+
+/* ── Font ─────────────────────────────────────────────────── */
+/* Press Start 2P ya cargada en index.html */
+
+/* ── CSS Variables Minecraft ──────────────────────────────── */
+:root {
+  --mc-dirt:        #866043;
+  --mc-dirt-dark:   #5a3d22;
+  --mc-dirt-darker: #3b2612;
+  --mc-stone:       #7f7f7f;
+  --mc-stone-light: #9d9d9d;
+  --mc-stone-dark:  #4a4a4a;
+  --mc-obsidian:    #1a0f24;
+  --mc-emerald:     #17dd62;
+  --mc-green-dark:  #0da84a;
+  --mc-red:         #e03c3c;
+  --mc-red-dark:    #aa1f1f;
+  --mc-gold:        #ffaa00;
+  --mc-gold-dark:   #d48800;
+  --mc-diamond:     #5decf5;
+  --mc-sky:         #76c3ff;
+  --mc-text:        #ffffff;
+  --mc-text-shadow: #3f3f3f;
+  --mc-panel-bg:    rgba(0, 0, 0, 0.65);
+  --mc-btn-top:     #9e9e9e;
+  --mc-btn-mid:     #8c8c8c;
+  --mc-btn-bot:     #4a4a4a;
+  --mc-input-bg:    #000000;
+  --mc-border:      rgba(255,255,255,0.12);
+}
+
+/* ── Reset & Base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--mc-text);
+  background-color: var(--mc-dirt-darker);
+  background-image:
+    /* Pixel grid para simular textura de tierra */
+    repeating-linear-gradient(0deg,   transparent, transparent 15px, rgba(0,0,0,0.18) 15px, rgba(0,0,0,0.18) 16px),
+    repeating-linear-gradient(90deg,  transparent, transparent 15px, rgba(0,0,0,0.18) 15px, rgba(0,0,0,0.18) 16px),
+    repeating-linear-gradient(0deg,   rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(90deg,  rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 8px);
+  overflow: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 3px 3px var(--mc-text-shadow);
+}
+
+/* ── Scrollbar estilo Minecraft ───────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb {
+  background: var(--mc-stone);
+  border: 2px solid var(--mc-stone-dark);
+  image-rendering: pixelated;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--mc-stone-light); }
+
+/* ── Fondo tierra (pantallas completas) ──────────────────── */
+.mc-dirt-bg {
+  min-height: 100vh;
+  background-color: var(--mc-dirt-darker);
+  background-image:
+    repeating-linear-gradient(0deg,   transparent, transparent 15px, rgba(0,0,0,0.18) 15px, rgba(0,0,0,0.18) 16px),
+    repeating-linear-gradient(90deg,  transparent, transparent 15px, rgba(0,0,0,0.18) 15px, rgba(0,0,0,0.18) 16px),
+    repeating-linear-gradient(0deg,   rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(90deg,  rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 8px);
+}
+
+/* ── Panel oscuro (el overlay semitransparente de Minecraft) ─ */
+.mc-panel {
+  background: var(--mc-panel-bg);
+  border: 2px solid rgba(255,255,255,0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.05),
+    0 4px 32px rgba(0,0,0,0.8);
+  padding: 1.5rem;
+}
+
+/* ── Botón estilo Minecraft ───────────────────────────────── */
+.mc-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: #fff;
+  text-shadow: 2px 2px var(--mc-text-shadow);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  transition: filter 0.08s;
+  image-rendering: pixelated;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 100%;
+  /* Aspecto piedra/botón MC */
+  background:
+    linear-gradient(180deg,
+      #9a9a9a 0%, #9a9a9a 2px,
+      #8c8c8c 2px, #8c8c8c 50%,
+      #6e6e6e 50%, #6e6e6e calc(100% - 2px),
+      #4a4a4a calc(100% - 2px), #4a4a4a 100%
+    );
+  box-shadow:
+    inset  2px  0   0 rgba(255,255,255,0.28),
+    inset -2px  0   0 rgba(0,0,0,0.35),
+    inset  0   2px  0 rgba(255,255,255,0.28),
+    inset  0  -2px  0 rgba(0,0,0,0.35),
+    2px 2px 0 rgba(0,0,0,0.7);
+}
+.mc-btn:hover:not(:disabled) {
+  filter: brightness(1.2);
+  color: #ffffa0;
+  text-shadow: 2px 2px #7a7a00;
+}
+.mc-btn:active:not(:disabled) {
+  filter: brightness(0.85);
+  transform: translate(1px, 1px);
+  box-shadow:
+    inset  1px  0   0 rgba(255,255,255,0.28),
+    inset -1px  0   0 rgba(0,0,0,0.35),
+    inset  0   1px  0 rgba(255,255,255,0.28),
+    inset  0  -1px  0 rgba(0,0,0,0.35),
+    1px 1px 0 rgba(0,0,0,0.7);
+}
+.mc-btn:disabled { filter: brightness(0.55); cursor: not-allowed; }
+
+/* Variantes de color */
+.mc-btn-green {
+  background:
+    linear-gradient(180deg,
+      #5de87d 0%, #5de87d 2px,
+      #3cba58 2px, #3cba58 50%,
+      #1f8c38 50%, #1f8c38 calc(100% - 2px),
+      #0d5c22 calc(100% - 2px), #0d5c22 100%
+    );
+  box-shadow:
+    inset  2px  0   0 rgba(255,255,255,0.28),
+    inset -2px  0   0 rgba(0,0,0,0.40),
+    inset  0   2px  0 rgba(255,255,255,0.28),
+    inset  0  -2px  0 rgba(0,0,0,0.40),
+    2px 2px 0 rgba(0,0,0,0.7);
+}
+.mc-btn-red {
+  background:
+    linear-gradient(180deg,
+      #f07070 0%, #f07070 2px,
+      #d43a3a 2px, #d43a3a 50%,
+      #a01515 50%, #a01515 calc(100% - 2px),
+      #6e0000 calc(100% - 2px), #6e0000 100%
+    );
+  box-shadow:
+    inset  2px  0   0 rgba(255,255,255,0.28),
+    inset -2px  0   0 rgba(0,0,0,0.40),
+    inset  0   2px  0 rgba(255,255,255,0.28),
+    inset  0  -2px  0 rgba(0,0,0,0.40),
+    2px 2px 0 rgba(0,0,0,0.7);
+}
+.mc-btn-gold {
+  background:
+    linear-gradient(180deg,
+      #ffdd44 0%, #ffdd44 2px,
+      #e6b800 2px, #e6b800 50%,
+      #b08800 50%, #b08800 calc(100% - 2px),
+      #6e5500 calc(100% - 2px), #6e5500 100%
+    );
+  box-shadow:
+    inset  2px  0   0 rgba(255,255,255,0.28),
+    inset -2px  0   0 rgba(0,0,0,0.40),
+    inset  0   2px  0 rgba(255,255,255,0.28),
+    inset  0  -2px  0 rgba(0,0,0,0.40),
+    2px 2px 0 rgba(0,0,0,0.7);
+}
+
+/* ── Input estilo Minecraft ───────────────────────────────── */
+.mc-input {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #fff;
+  background: var(--mc-input-bg);
+  border: 2px solid #555;
+  outline: none;
+  padding: 10px 12px;
+  width: 100%;
+  display: block;
+  transition: border-color 0.1s;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.7);
+}
+.mc-input::placeholder { color: #555; }
+.mc-input:focus {
+  border-color: #fff;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.7), 0 0 0 2px rgba(255,255,255,0.12);
+}
+input[type="date"].mc-input { color-scheme: dark; }
+input[type="number"].mc-input { -moz-appearance: textfield; }
+input[type="number"].mc-input::-webkit-outer-spin-button,
+input[type="number"].mc-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+/* ── Label estilo Minecraft ───────────────────────────────── */
+.mc-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #aaaaaa;
+  text-shadow: 1px 1px #3f3f3f;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ── Título grande (logo estilo Minecraft) ────────────────── */
+.mc-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 22px;
+  color: #fff;
+  text-shadow: 3px 3px #3f3f3f;
+  letter-spacing: 0.05em;
+}
+.mc-title-gold {
+  color: var(--mc-gold);
+  text-shadow: 3px 3px #5a3d00;
+}
+.mc-title-green {
+  color: var(--mc-emerald);
+  text-shadow: 3px 3px #083d1a;
+}
+
+/* ── Mensajes ─────────────────────────────────────────────── */
+.mc-error {
+  background: rgba(180,0,0,0.4);
+  border: 2px solid #ff4444;
+  color: #ffaaaa;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  padding: 10px 12px;
+  text-shadow: 1px 1px #500;
+}
+.mc-success {
+  background: rgba(0,140,0,0.35);
+  border: 2px solid #44ff88;
+  color: #aaffcc;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  padding: 10px 12px;
+  text-shadow: 1px 1px #005020;
+}
+
+/* ── Spinner Minecraft ────────────────────────────────────── */
+.mc-spinner {
+  width: 16px; height: 16px;
+  border: 3px solid rgba(255,255,255,0.25);
+  border-top-color: #fff;
+  border-radius: 0; /* cuadrado, estilo pixel */
+  animation: mc-spin 0.6s steps(8) infinite;
+  display: inline-block;
+}
+@keyframes mc-spin { to { transform: rotate(360deg); } }
+
+/* ── Utilidades ─────────────────────────────────────────────*/
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}

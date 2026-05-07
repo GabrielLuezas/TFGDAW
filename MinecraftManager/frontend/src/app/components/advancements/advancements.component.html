@@ -1,0 +1,99 @@
+<div class="h-full flex flex-col">
+  <!-- Header with player selector -->
+  <div class="flex justify-between items-center px-8 pt-6 pb-4">
+    <h2 class="text-4xl font-serif text-white">Logros</h2>
+    <select class="bg-[#E5E7EB] text-black px-4 py-2 rounded outline-none focus:ring-2 focus:ring-[#D946EF]"
+            [(ngModel)]="selectedPlayer"
+            (ngModelChange)="onPlayerChange()">
+      <option [ngValue]="null" disabled>Seleccionar Jugador</option>
+      @for (p of players; track p.uuid) {
+        <option [ngValue]="p.uuid">{{ p.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading) {
+    <div class="text-center mt-20 text-gray-400">Cargando logros...</div>
+  } @else {
+    <div class="flex-1 flex flex-col mx-8 mb-8 overflow-hidden">
+
+      <!-- Category Tabs (Minecraft style) -->
+      <div class="tab-bar">
+        @for (root of rootAdvancements; track root.key) {
+          <button class="tab-item"
+                  [class.active]="activeTab === root.key"
+                  (click)="selectTab(root.key)"
+                  [title]="root.display.title">
+            <img [src]="textureService.getTextureUrl(root.display.icon)"
+                 [alt]="root.display.title"
+                 class="pixelated tab-icon" />
+          </button>
+        }
+      </div>
+
+      <!-- Main Canvas with stone background -->
+      <div class="advancement-canvas"
+           (mousedown)="startDrag($event)"
+           (mousemove)="onDrag($event)"
+           (mouseup)="endDrag()"
+           (mouseleave)="endDrag()">
+
+        <!-- Canvas Title -->
+        <div class="canvas-title">
+          @if (activeTab) {
+            {{ activeTabTitle }}
+          }
+        </div>
+
+        <!-- Scrollable/pannable inner container -->
+        <div class="canvas-inner"
+             [style.transform]="'translate(' + canvasOffsetX + 'px, ' + canvasOffsetY + 'px)'"
+             [style.width.px]="canvasWidth"
+             [style.height.px]="canvasHeight">
+
+          <!-- SVG Connector Lines -->
+          <svg class="connectors"
+               [attr.width]="canvasWidth"
+               [attr.height]="canvasHeight">
+            @for (line of connectorLines; track $index) {
+              <line [attr.x1]="line.x1"
+                    [attr.y1]="line.y1"
+                    [attr.x2]="line.x2"
+                    [attr.y2]="line.y2" />
+            }
+          </svg>
+
+          <!-- Advancement Nodes -->
+          @for (node of nodePositions; track node.advancement.key) {
+            <div class="advancement-node"
+                 [class.completed]="node.advancement.done"
+                 [ngClass]="getFrameClass(node.advancement.display.frame)"
+                 [style.left.px]="node.x"
+                 [style.top.px]="node.y"
+                 (mouseenter)="showTooltip($event, node.advancement)"
+                 (mouseleave)="hideTooltip()">
+              <img [src]="textureService.getTextureUrl(node.advancement.display.icon)"
+                   [alt]="node.advancement.display.title"
+                   class="pixelated node-icon" />
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Tooltip -->
+  @if (hoveredNode) {
+    <div class="mc-tooltip"
+         [style.left.px]="tooltipPos.x"
+         [style.top.px]="tooltipPos.y">
+      <p class="tooltip-title" [class.completed]="hoveredNode.done" [class.challenge]="hoveredNode.display.frame.toLowerCase() === 'challenge'">
+        {{ hoveredNode.display.title }}
+      </p>
+      <p class="tooltip-desc">{{ hoveredNode.display.description }}</p>
+      <p class="tooltip-status" [class.done]="hoveredNode.done">
+        {{ hoveredNode.done ? '✓ Completado' : '✗ Pendiente' }}
+      </p>
+    </div>
+  }
+</div>

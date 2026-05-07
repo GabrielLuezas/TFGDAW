@@ -18,7 +18,8 @@ dist-ssr/
 *.local
 
 # --- Java / Plugin Minecraft ---
-# Ignoramos los archivos compilados de Java
+# Ignoramos la carpeta del plugin y los archivos compilados de Java
+plugin/
 target/
 *.class
 *.log

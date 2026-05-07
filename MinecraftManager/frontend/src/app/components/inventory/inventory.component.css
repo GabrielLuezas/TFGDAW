@@ -1,0 +1,33 @@
+.mc-container {
+  background-color: #C6C6C6;
+  border: 4px solid #555;
+}
+
+.slot {
+  width: 4rem;
+  height: 4rem;
+  background-color: #9CA3AF;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.slot-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+
+.slot-count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: bold;
+  filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.8));
+  padding: 0 0.25rem;
+}

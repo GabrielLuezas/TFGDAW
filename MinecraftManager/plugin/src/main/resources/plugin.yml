@@ -1,6 +1,18 @@
 name: MinecraftManagerPlugin
 version: ${project.version}
 main: com.tfg.minecraftmanager.MinecraftManagerPlugin
-api-version: 1.21
+api-version: '1.21.5'
 authors: [TuNombre]
 description: Plugin para TFG Minecraft Manager
+
+commands:
+  linkear:
+    description: Muestra el token de vinculación del servidor para conectar con MinecraftManager
+    usage: /linkear
+    permission: minecraftmanager.linkear
+    permission-message: "§cNecesitas ser OP para usar este comando."
+
+permissions:
+  minecraftmanager.linkear:
+    description: Permite usar /linkear para obtener el token del servidor
+    default: op

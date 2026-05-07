@@ -1,0 +1,211 @@
+/* ======================================
+   Minecraft Advancements Screen Replica
+   ====================================== */
+
+/* --- Category Tab Bar --- */
+.tab-bar {
+  display: flex;
+  gap: 2px;
+  padding: 0 4px;
+  z-index: 10;
+  position: relative;
+}
+
+.tab-item {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #555;
+  border: 3px solid #333;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  top: 4px;
+}
+
+.tab-item:hover {
+  background: #6B6B6B;
+  top: 2px;
+}
+
+.tab-item.active {
+  background: #8B8B8B;
+  border-color: #AAA;
+  top: 0;
+  height: 60px;
+  z-index: 11;
+}
+
+.tab-icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* --- Main Canvas --- */
+.advancement-canvas {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  border: 4px solid #555;
+  border-top: 4px solid #AAA;
+  background-color: #8B8B8B;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  /* Gives a subtle tile/stone grid effect */
+}
+
+.advancement-canvas:active {
+  cursor: grabbing;
+}
+
+.canvas-title {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #3f3f3f;
+  z-index: 5;
+  pointer-events: none;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+}
+
+.canvas-inner {
+  position: relative;
+  will-change: transform;
+}
+
+/* --- SVG Connectors --- */
+.connectors {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.connectors line {
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 3;
+}
+
+/* --- Advancement Nodes --- */
+.advancement-node {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease;
+  z-index: 2;
+}
+
+.advancement-node:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+/* --- Frame: Not completed (grey) --- */
+.advancement-node:not(.completed) {
+  background: linear-gradient(145deg, #7a7a7a, #5a5a5a);
+  border: 3px solid #444;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.15),
+    inset -2px -2px 0 rgba(0,0,0,0.25);
+}
+
+/* --- Frame: Completed (gold) --- */
+.advancement-node.completed {
+  background: linear-gradient(145deg, #d4a017, #a07818);
+  border: 3px solid #f5d442;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.3),
+    inset -2px -2px 0 rgba(0,0,0,0.2),
+    0 0 8px rgba(255, 212, 66, 0.3);
+}
+
+/* --- Frame types --- */
+.frame-task {
+  border-radius: 3px;
+}
+
+.frame-goal {
+  border-radius: 14px;
+}
+
+.frame-challenge {
+  border-radius: 3px;
+}
+
+.frame-challenge.completed {
+  background: linear-gradient(145deg, #c060d0, #8a3a9a);
+  border-color: #e88af8;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.3),
+    inset -2px -2px 0 rgba(0,0,0,0.2),
+    0 0 12px rgba(217, 70, 239, 0.4);
+}
+
+.frame-challenge:not(.completed) {
+  border-color: #6a4a6a;
+}
+
+.node-icon {
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+}
+
+/* --- Tooltip --- */
+.mc-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: #100010ee;
+  padding: 10px 14px;
+  border-radius: 4px;
+  border: 2px solid #28007a;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  min-width: 180px;
+  max-width: 300px;
+  transform: translate(-50%, -100%) translateY(-12px);
+}
+
+.tooltip-title {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  color: #FFAA00;
+}
+
+.tooltip-title.completed {
+  color: #54FC54;
+}
+
+.tooltip-title.challenge {
+  color: #D946EF;
+}
+
+.tooltip-desc {
+  color: #AAAAAA;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.tooltip-status {
+  font-size: 0.75rem;
+  color: #FF5555;
+  font-weight: 600;
+}
+
+.tooltip-status.done {
+  color: #55FF55;
+}
