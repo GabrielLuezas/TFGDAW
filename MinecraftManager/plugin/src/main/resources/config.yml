@@ -1,5 +1,5 @@
 # Configuración del MinecraftManager
-# Pon aquí los puertos que te dio FalixNodes (Add Port)
+# Puertos para la API HTTP y WebSocket del plugin
 
 api-port: 8081
 websocket-port: 8082
