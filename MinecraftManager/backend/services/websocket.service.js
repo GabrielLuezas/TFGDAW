@@ -79,13 +79,27 @@ function connectToServer(server) {
       connections.set(id, ws);
     });
 
-    ws.on("message", (data) => {
+    ws.on("message", async (data) => {
       try {
         const message = JSON.parse(data);
-        // Emitir solo a los clientes suscritos a este servidor
-        io.to(`server_${id}`).emit("chat_message", { ...message, serverId: id });
+        const eventType = message.type || "chat";
+
+        // Obtener todos los registros de servidores que comparten este mismo token único
+        const db = getDb();
+        const relatedServers = await db("servers")
+          .select("id", "role")
+          .where({ unique_token });
+
+        for (const s of relatedServers) {
+          // Un jugador común no debe ver la ejecución de comandos
+          if (eventType === "command" && s.role === "player") {
+            continue;
+          }
+          // Emitir a la sala de este servidor particular
+          io.to(`server_${s.id}`).emit("chat_message", { ...message, serverId: s.id });
+        }
       } catch (e) {
-        console.error(`[WS] Error parseando mensaje de servidor #${id}:`, e);
+        console.error(`[WS] Error parseando/retransmitiendo mensaje de servidor #${id}:`, e);
       }
     });
 

@@ -28,7 +28,7 @@ export const routes: Routes = [
   // ── Auth + servidor activo requeridos ─────────────────────
   { path: 'dashboard',    component: DashboardComponent,    canActivate: [adminGuard] },
   { path: 'players',      component: PlayerListComponent,   canActivate: [serverGuard] },
-  { path: 'chat',         component: ChatComponent,         canActivate: [adminGuard] },
+  { path: 'chat',         component: ChatComponent,         canActivate: [serverGuard] },
   { path: 'inventory',    component: InventoryComponent,    canActivate: [serverGuard] },
   { path: 'advancements', component: AdvancementsComponent, canActivate: [serverGuard] },
   { path: 'whitelist',        component: WhitelistComponent,        canActivate: [adminGuard] },

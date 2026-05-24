@@ -192,7 +192,7 @@ export class SidebarComponent {
     const all = [
       { id: 'dashboard',       path: '/dashboard',       label: 'Servidor',    icon: '📊', adminOnly: true },
       { id: 'players',         path: '/players',          label: 'Jugadores',   icon: '👥' },
-      { id: 'chat',            path: '/chat',             label: 'Chat',        icon: '💬', adminOnly: true },
+      { id: 'chat',            path: '/chat',             label: 'Chat',        icon: '💬' },
       { id: 'advancements',    path: '/advancements',     label: 'Logros',      icon: '🏆' },
       { id: 'inventory',       path: '/inventory',        label: 'Inventarios', icon: '🎒' },
       { id: 'whitelist',       path: '/whitelist',        label: 'Whitelist',   icon: '📋', adminOnly: true },
