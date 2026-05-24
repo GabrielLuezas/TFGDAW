@@ -61,6 +61,9 @@ function connectToServer(server) {
     return;
   }
 
+  // Reservar el token en el mapa de forma síncrona e inmediata para bloquear duplicados en el bucle
+  connections.set(unique_token, null);
+
   let useFallback = false;
 
   function connect() {
@@ -74,9 +77,11 @@ function connectToServer(server) {
       handshakeTimeout: 5000, // Timeout rápido para fallar y probar fallback rápido
     });
 
+    // Registrar el objeto ws de forma síncrona e inmediata
+    connections.set(unique_token, ws);
+
     ws.on("open", () => {
       console.log(`[WS] Conectado con éxito al servidor #${id} (${currentWsUrl})`);
-      connections.set(unique_token, ws);
     });
 
     ws.on("message", async (data) => {
