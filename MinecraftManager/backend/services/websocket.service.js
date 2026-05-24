@@ -56,8 +56,8 @@ function connectToServer(server) {
   // Usa api_host si está definido (ej: localhost para FeatherMC), si no usa ip
   const wsHost = api_host || ip;
 
-  if (connections.has(id)) {
-    // Ya existe una conexión, no duplicar
+  if (connections.has(unique_token)) {
+    console.log(`[WS] Conexión activa para el token del servidor #${id} ya existe. Omitiendo duplicado.`);
     return;
   }
 
@@ -76,7 +76,7 @@ function connectToServer(server) {
 
     ws.on("open", () => {
       console.log(`[WS] Conectado con éxito al servidor #${id} (${currentWsUrl})`);
-      connections.set(id, ws);
+      connections.set(unique_token, ws);
     });
 
     ws.on("message", async (data) => {
@@ -105,7 +105,7 @@ function connectToServer(server) {
 
     ws.on("close", () => {
       console.log(`[WS] Conexión cerrada con el servidor #${id}.`);
-      connections.delete(id);
+      connections.delete(unique_token);
       setTimeout(connect, 5000);
     });
 
@@ -130,12 +130,23 @@ function connectToServer(server) {
  * @param {number} serverId
  */
 function disconnectFromServer(serverId) {
-  const ws = connections.get(serverId);
-  if (ws) {
-    ws.terminate();
-    connections.delete(serverId);
-    console.log(`[WS] Desconectado y eliminado servidor #${serverId}`);
-  }
+  const db = getDb();
+  db("servers")
+    .where({ id: serverId })
+    .first()
+    .then((server) => {
+      if (server) {
+        const ws = connections.get(server.unique_token);
+        if (ws) {
+          ws.terminate();
+          connections.delete(server.unique_token);
+          console.log(`[WS] Desconectado y eliminado servidor con token para #${serverId}`);
+        }
+      }
+    })
+    .catch((err) => {
+      console.error("[WS] Error al desconectar servidor:", err.message);
+    });
 }
 
 module.exports = { init, connectToServer, disconnectFromServer, connectAllAdminServers };
