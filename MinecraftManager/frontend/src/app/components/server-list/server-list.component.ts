@@ -13,7 +13,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
   template: `
     <div class="mc-dirt-bg sl-wrap">
 
-      <!-- Header estilo MC -->
       <header class="sl-header">
         <div class="sl-header-title">
           <span style="font-size:1.6rem;filter:drop-shadow(0 0 6px rgba(255,170,0,0.5))">⛏️</span>
@@ -27,7 +26,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
         </div>
       </header>
 
-      <!-- Contenido principal -->
       <main class="sl-main">
         <h2 class="sl-title">Multijugador</h2>
 
@@ -36,7 +34,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
         } @else {
           <div class="sl-columns">
 
-            <!-- Columna Jugador -->
             <div class="sl-column">
               <div class="sl-col-header sl-col-green">
                 <span>🎮 Servidores donde juego</span>
@@ -63,7 +60,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
               </div>
             </div>
 
-            <!-- Columna Admin -->
             <div class="sl-column">
               <div class="sl-col-header sl-col-red">
                 <span>⚙ Servidores que administro</span>
@@ -91,7 +87,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
             </div>
           </div>
 
-          <!-- Botones acción (estilo bottom bar de Minecraft) -->
           <div class="sl-actions">
             <button id="btn-add-server" class="mc-btn mc-btn-green sl-btn"
               (click)="showAddModal.set(true)">
@@ -115,7 +110,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
   styles: [`
     .sl-wrap { min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* ─ Header ─────────────────────────────────────────────── */
     .sl-header {
       display: flex;
       align-items: center;
@@ -141,7 +135,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
     }
     .header-logout-btn { min-width: auto; padding: 10px 14px; font-size: 9px; }
 
-    /* ─ Main ────────────────────────────────────────────────── */
     .sl-main { flex: 1; padding: 2.5rem 2rem; max-width: 1040px; margin: 0 auto; width: 100%; }
 
     .sl-title {
@@ -161,7 +154,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
       margin-top: 4rem;
     }
 
-    /* ─ Columnas ────────────────────────────────────────────── */
     .sl-columns {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -196,7 +188,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
       font-size: 8px;
     }
 
-    /* ─ Tarjetas ────────────────────────────────────────────── */
     .sl-list { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
     .sl-card {
       display: flex;
@@ -249,7 +240,6 @@ import { AddServerComponent } from '../add-server/add-server.component';
       text-align: center; padding: 2rem 0;
     }
 
-    /* ─ Botones inferiores ─────────────────────────────────── */
     .sl-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
     .sl-btn { max-width: 260px; font-size: 10px; padding: 14px; }
   `]
@@ -278,7 +268,6 @@ export class ServerListComponent implements OnInit {
 
   selectServer(srv: ServerEntry): void {
     this.auth.setActiveServer(srv);
-    // Los admins ven el dashboard del servidor; los jugadores van directamente a jugadores
     const destination = srv.role === 'admin' ? '/dashboard' : '/players';
     this.router.navigate([destination]);
   }

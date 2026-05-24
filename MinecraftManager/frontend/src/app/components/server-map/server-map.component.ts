@@ -9,7 +9,6 @@ import { ApiService } from '../../services/api.service';
   imports: [CommonModule],
   template: `
     <div class="map-container">
-      <!-- Header -->
       <div class="map-header">
         <h2 class="map-title">Mapa del Mundo</h2>
         @if (mapUrl) {
@@ -19,7 +18,6 @@ import { ApiService } from '../../services/api.service';
         }
       </div>
 
-      <!-- Map Container -->
       <div class="map-frame">
         @if (loading) {
           <div class="map-overlay">
@@ -153,7 +151,6 @@ export class ServerMapComponent implements OnInit {
         this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(data.url);
       },
       error: () => {
-        // Fallback: use default BlueMap URL if backend is unreachable
         console.warn('Could not reach backend for map URL, using fallback:', this.FALLBACK_MAP_URL);
         this.rawUrl = this.FALLBACK_MAP_URL;
         this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.FALLBACK_MAP_URL);

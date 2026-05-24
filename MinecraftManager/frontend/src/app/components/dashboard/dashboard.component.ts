@@ -19,9 +19,7 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
           <div class="text-gray-500">Comprueba que el servidor Minecraft está encendido</div>
         </div>
       } @else if (serverInfo) {
-        <!-- Top Row: Main Stats -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 max-w-7xl mx-auto">
-          <!-- TPS Card -->
           <div class="stat-card">
             <div class="stat-icon" [style.background]="getTpsGradient()">⚡</div>
             <div class="stat-label">TPS (1 min)</div>
@@ -33,7 +31,6 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
             </div>
           </div>
 
-          <!-- Players Card -->
           <div class="stat-card">
             <div class="stat-icon" style="background: linear-gradient(135deg, #31AF7C, #22c55e)">👥</div>
             <div class="stat-label">Jugadores</div>
@@ -45,7 +42,6 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
             </div>
           </div>
 
-          <!-- Memory Card -->
           <div class="stat-card">
             <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #a78bfa)">💾</div>
             <div class="stat-label">Memoria RAM</div>
@@ -60,7 +56,7 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
             </div>
           </div>
 
-          <!-- Version Card -->
+
           <div class="stat-card">
             <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24)">🖥️</div>
             <div class="stat-label">Versión</div>
@@ -72,7 +68,6 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
             </div>
           </div>
 
-          <!-- Uptime Card -->
           <div class="stat-card">
             <div class="stat-icon" style="background: linear-gradient(135deg, #06b6d4, #22d3ee)">⏱️</div>
             <div class="stat-label">Tiempo Activo</div>
@@ -82,7 +77,6 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
             <div class="stat-sub">Desde el último reinicio</div>
           </div>
 
-          <!-- CPU Card -->
           <div class="stat-card">
             <div class="stat-icon" [style.background]="getCpuGradient()">🔧</div>
             <div class="stat-label">CPU (JVM)</div>
@@ -95,7 +89,6 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
           </div>
         </div>
 
-        <!-- Worlds Section -->
         <div class="max-w-7xl mx-auto">
           <h3 class="text-2xl font-serif text-white mb-4">🌍 Mundos</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -265,7 +258,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getWorldTime(ticks: number): string {
-    // Minecraft: 0 = 6:00, 6000 = 12:00, 12000 = 18:00, 18000 = 0:00
     const hours = Math.floor(((ticks + 6000) % 24000) / 1000);
     const mins = Math.floor((((ticks + 6000) % 24000) % 1000) / 16.67);
     return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;

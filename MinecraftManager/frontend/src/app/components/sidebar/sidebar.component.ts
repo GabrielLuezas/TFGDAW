@@ -9,7 +9,6 @@ import { AuthService } from '../../services/auth.service';
   imports: [CommonModule, RouterLink, RouterLinkActive],
   template: `
     <aside class="mc-sidebar">
-      <!-- Logo -->
       <div class="sidebar-logo-area">
         <div class="sidebar-logo-text">
           <span class="logo-mc">MC</span><span class="logo-mgr">Manager</span>
@@ -19,12 +18,10 @@ import { AuthService } from '../../services/auth.service';
         </div>
       </div>
 
-      <!-- Badge de rol -->
       <div class="sidebar-role" [class.role-admin]="auth.isAdmin()" [class.role-player]="!auth.isAdmin()">
         {{ auth.isAdmin() ? '⚙ ADMINISTRADOR' : '🎮 JUGADOR' }}
       </div>
 
-      <!-- Navegación -->
       <nav class="sidebar-nav">
         @for (item of navItems(); track item.path) {
           <a
@@ -40,7 +37,6 @@ import { AuthService } from '../../services/auth.service';
         }
       </nav>
 
-      <!-- Footer -->
       <div class="sidebar-footer">
         <div class="sidebar-user">
           <span class="user-head">🪖</span>
@@ -71,7 +67,6 @@ import { AuthService } from '../../services/auth.service';
       overflow: hidden;
     }
 
-    /* Logo */
     .sidebar-logo-area {
       padding: 16px 14px 12px;
       background: rgba(0,0,0,0.45);
@@ -107,7 +102,6 @@ import { AuthService } from '../../services/auth.service';
       text-overflow: ellipsis;
     }
 
-    /* Role badge */
     .sidebar-role {
       font-family: 'Press Start 2P', monospace;
       font-size: 8px;
@@ -118,7 +112,6 @@ import { AuthService } from '../../services/auth.service';
     .role-admin  { background: rgba(180,0,0,0.3); color: #ffaaaa; border-bottom: 2px solid rgba(180,0,0,0.4); text-shadow: 1px 1px #500; }
     .role-player { background: rgba(0,140,60,0.25); color: #aaffcc; border-bottom: 2px solid rgba(0,140,60,0.3); text-shadow: 1px 1px #083d1a; }
 
-    /* Navegación */
     .sidebar-nav {
       flex: 1;
       overflow-y: auto;
@@ -151,7 +144,6 @@ import { AuthService } from '../../services/auth.service';
     .nav-icon { width: 22px; text-align: center; font-size: 16px; }
     .nav-label {}
 
-    /* Footer */
     .sidebar-footer {
       padding: 12px 14px;
       background: rgba(0,0,0,0.45);

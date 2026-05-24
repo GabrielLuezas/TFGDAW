@@ -82,7 +82,6 @@ export class MicrosoftCallbackComponent implements OnInit {
   ngOnInit(): void {
     const params = this.route.snapshot.queryParamMap;
 
-    // Caso error: Microsoft rechazó o config incorrecta
     const msError = params.get('error');
     if (msError) {
       this._error = true;
@@ -90,7 +89,6 @@ export class MicrosoftCallbackComponent implements OnInit {
       return;
     }
 
-    // Caso éxito: guardar sesión y redirigir
     const token    = params.get('token');
     const userId   = params.get('userId');
     const username = params.get('username');

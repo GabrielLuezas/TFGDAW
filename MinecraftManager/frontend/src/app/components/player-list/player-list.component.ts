@@ -76,7 +76,6 @@ export class PlayerListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Initial fetch + polling every 5 seconds
     this.sub.add(
       interval(5000).pipe(
         switchMap(() => this.apiService.getPlayers())
@@ -86,7 +85,6 @@ export class PlayerListComponent implements OnInit, OnDestroy {
       })
     );
 
-    // Initial fetch
     this.apiService.getPlayers().subscribe(data => {
       this.players = data;
       this.loading = false;

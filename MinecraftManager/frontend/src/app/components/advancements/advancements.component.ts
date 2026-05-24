@@ -94,13 +94,11 @@ export class AdvancementsComponent implements OnInit, OnDestroy {
     const root = this.advancements.find(a => a.key === this.activeTab);
     if (!root) return;
 
-    // Build tree structure
     this.nodePositions = [];
     this.connectorLines = [];
 
     const rootNode = this.buildNodeTree(root);
     if (rootNode) {
-      // Calculate positions using a simple recursive layout
       this.layoutTree(rootNode, 0, 0);
       this.flattenTree(rootNode);
       this.buildConnectors(rootNode);
@@ -121,22 +119,20 @@ export class AdvancementsComponent implements OnInit, OnDestroy {
   }
 
   private layoutTree(node: NodePosition, depth: number, yOffset: number): number {
-    // X position based on depth
+
     node.x = depth * this.H_SPACING;
 
     if (node.children.length === 0) {
       node.y = yOffset;
-      return 1; // This node takes 1 row
+      return 1; 
     }
 
-    // Layout children vertically
     let totalRows = 0;
     for (const child of node.children) {
       const childRows = this.layoutTree(child, depth + 1, yOffset + totalRows * this.V_SPACING);
       totalRows += childRows;
     }
 
-    // Center parent among its children
     const firstChildY = node.children[0].y;
     const lastChildY = node.children[node.children.length - 1].y;
     node.y = (firstChildY + lastChildY) / 2;
@@ -159,19 +155,15 @@ export class AdvancementsComponent implements OnInit, OnDestroy {
       const childCenterX = child.x + this.NODE_SIZE / 2;
       const childCenterY = child.y + this.NODE_SIZE / 2;
 
-      // Horizontal line from parent to midpoint
       const midX = (centerX + childCenterX) / 2;
       this.connectorLines.push({ x1: centerX, y1: centerY, x2: midX, y2: centerY });
-      // Vertical line from midpoint at parent height to child height
       this.connectorLines.push({ x1: midX, y1: centerY, x2: midX, y2: childCenterY });
-      // Horizontal line from midpoint to child
       this.connectorLines.push({ x1: midX, y1: childCenterY, x2: childCenterX, y2: childCenterY });
 
       this.buildConnectors(child);
     }
   }
 
-  // Canvas drag handlers
   startDrag(event: MouseEvent): void {
     this.isDragging = true;
     this.dragStartX = event.clientX;
@@ -190,7 +182,6 @@ export class AdvancementsComponent implements OnInit, OnDestroy {
     this.isDragging = false;
   }
 
-  // Tooltip
   showTooltip(event: MouseEvent, adv: Advancement): void {
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     this.hoveredNode = adv;
@@ -213,7 +204,7 @@ export class AdvancementsComponent implements OnInit, OnDestroy {
     return adv?.display?.title || '';
   }
 
-  // Calculate SVG viewport size
+
   get canvasWidth(): number {
     if (this.nodePositions.length === 0) return 800;
     return Math.max(...this.nodePositions.map(n => n.x)) + this.NODE_SIZE + 100;

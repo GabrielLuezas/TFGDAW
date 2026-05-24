@@ -17,7 +17,6 @@
   } @else {
     <div class="flex-1 flex flex-col mx-8 mb-8 overflow-hidden">
 
-      <!-- Category Tabs (Minecraft style) -->
       <div class="tab-bar">
         @for (root of rootAdvancements; track root.key) {
           <button class="tab-item"
@@ -31,27 +30,23 @@
         }
       </div>
 
-      <!-- Main Canvas with stone background -->
       <div class="advancement-canvas"
            (mousedown)="startDrag($event)"
            (mousemove)="onDrag($event)"
            (mouseup)="endDrag()"
            (mouseleave)="endDrag()">
 
-        <!-- Canvas Title -->
         <div class="canvas-title">
           @if (activeTab) {
             {{ activeTabTitle }}
           }
         </div>
 
-        <!-- Scrollable/pannable inner container -->
         <div class="canvas-inner"
              [style.transform]="'translate(' + canvasOffsetX + 'px, ' + canvasOffsetY + 'px)'"
              [style.width.px]="canvasWidth"
              [style.height.px]="canvasHeight">
 
-          <!-- SVG Connector Lines -->
           <svg class="connectors"
                [attr.width]="canvasWidth"
                [attr.height]="canvasHeight">
@@ -63,7 +58,6 @@
             }
           </svg>
 
-          <!-- Advancement Nodes -->
           @for (node of nodePositions; track node.advancement.key) {
             <div class="advancement-node"
                  [class.completed]="node.advancement.done"
@@ -82,7 +76,6 @@
     </div>
   }
 
-  <!-- Tooltip -->
   @if (hoveredNode) {
     <div class="mc-tooltip"
          [style.left.px]="tooltipPos.x"

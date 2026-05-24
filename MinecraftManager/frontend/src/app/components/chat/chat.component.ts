@@ -10,7 +10,7 @@ interface ChatLog {
   time: string;
   sender: string;
   text: string;
-  type: string; // chat, join, leave, death, advancement, command
+  type: string;
 }
 
 interface EventFilter {
@@ -43,9 +43,7 @@ interface EventFilter {
         }
       </div>
 
-      <!-- Chat Box -->
       <div class="flex-1 bg-[#1a1836] relative flex flex-col shadow-lg overflow-hidden rounded-xl border border-white/5">
-        <!-- Messages Area -->
         <div class="flex-1 overflow-y-auto p-6 space-y-1" #messagesContainer>
           @for (log of filteredLogs; track $index) {
             <div class="chat-message" [class]="'msg-' + log.type">
@@ -67,7 +65,6 @@ interface EventFilter {
           }
         </div>
 
-        <!-- Input Area -->
         <div class="bg-[#141230] p-0 flex items-center border-t border-white/5">
           <form (submit)="handleSend($event)" class="flex-1 flex items-center relative">
             <input type="text"
@@ -179,7 +176,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   ngOnInit(): void {
     this.socketService.connect();
 
-    // Si el usuario no es administrador, removemos el filtro de comandos
     if (!this.authService.isAdmin()) {
       this.filters = this.filters.filter(f => f.type !== 'command');
     }

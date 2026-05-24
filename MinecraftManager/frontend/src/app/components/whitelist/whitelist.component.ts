@@ -13,9 +13,7 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
     <div class="h-full overflow-y-auto p-8">
       <h2 class="text-4xl font-serif text-white text-center mb-8">Whitelist</h2>
 
-      <!-- Controls Bar -->
       <div class="max-w-4xl mx-auto mb-6 flex flex-wrap items-center gap-4">
-        <!-- Toggle -->
         <button (click)="toggleWhitelist()"
                 class="toggle-btn"
                 [class.toggle-on]="whitelistEnabled"
@@ -24,10 +22,8 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
           <span class="ml-2 font-medium">{{ whitelistEnabled ? 'Activada' : 'Desactivada' }}</span>
         </button>
 
-        <!-- Spacer -->
         <div class="flex-1"></div>
 
-        <!-- Add Player Form -->
         <form (submit)="addPlayer($event)" class="flex gap-2">
           <input type="text"
                  [(ngModel)]="newPlayerName"
@@ -42,17 +38,13 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
         </form>
       </div>
 
-      <!-- Error -->
       @if (error) {
         <div class="text-center text-red-400 mt-10 text-lg">⚠️ No se pudo conectar con el servidor</div>
       }
-
-      <!-- Loading -->
       @if (loading) {
         <div class="text-center text-gray-400 mt-16">Cargando whitelist...</div>
       }
 
-      <!-- Player List -->
       @if (!loading && !error) {
         @if (players.length === 0) {
           <div class="text-center text-gray-500 text-xl mt-20">La whitelist está vacía</div>
@@ -166,7 +158,6 @@ export class WhitelistComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.fetchWhitelist();
-    // Poll every 15 seconds
     this.sub.add(
       interval(15000).pipe(
         switchMap(() => this.apiService.getWhitelist())
@@ -212,7 +203,6 @@ export class WhitelistComponent implements OnInit, OnDestroy {
     this.apiService.updateWhitelist('add', name).subscribe({
       next: () => {
         this.newPlayerName = '';
-        // Refresh list after a small delay (server needs time to process)
         setTimeout(() => this.fetchWhitelist(), 500);
       }
     });

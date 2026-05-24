@@ -15,7 +15,6 @@ type Role = 'player' | 'admin';
       <div class="modal-box mc-panel" (click)="$event.stopPropagation()">
         <h2 class="modal-title">Añadir nuevo servidor</h2>
 
-        <!-- Tabs rol -->
         <div class="role-section">
           <span class="mc-label" style="font-size:9px">Tipo de usuario</span>
           <div class="role-tabs">
@@ -138,7 +137,6 @@ type Role = 'player' | 'admin';
     .field-group { display: flex; flex-direction: column; gap: 8px; }
     .ports-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    /* tamaños de input/label dentro del modal */
     .modal-box .mc-input { font-size: 10px; padding: 13px 14px; }
     .modal-box .mc-label { font-size: 9px; }
 

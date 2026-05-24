@@ -27,7 +27,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
   private sub = new Subscription();
 
-  // Mapping Bukkit potion names to standard Minecraft names
+
   readonly potionMap: Record<string, string> = {
     'SPEED': 'speed', 'SLOW': 'slowness', 'FAST_DIGGING': 'haste',
     'SLOW_DIGGING': 'mining_fatigue', 'INCREASE_DAMAGE': 'strength',

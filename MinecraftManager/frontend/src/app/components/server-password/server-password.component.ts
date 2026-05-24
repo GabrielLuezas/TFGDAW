@@ -109,7 +109,6 @@ import { AuthService } from '../../services/auth.service';
       margin: 1.25rem 0;
     }
 
-    /* Resultado */
     .sp-result { display: flex; flex-direction: column; gap: 12px; }
 
     .sp-password-box {
@@ -149,7 +148,6 @@ import { AuthService } from '../../services/auth.service';
       padding: 10px 12px;
     }
 
-    /* Vacío */
     .sp-empty {
       display: flex;
       flex-direction: column;

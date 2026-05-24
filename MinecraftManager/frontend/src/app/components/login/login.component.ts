@@ -13,7 +13,6 @@ import { environment } from '../../../environments/environment';
     <div class="mc-dirt-bg login-wrap">
       <div class="login-center">
 
-        <!-- Logo -->
         <div class="login-logo">
           <span class="logo-pickaxe">⛏️</span>
           <h1 class="mc-title" style="font-size:28px">
@@ -22,7 +21,6 @@ import { environment } from '../../../environments/environment';
           <p class="login-edition">Panel de Administración</p>
         </div>
 
-        <!-- Panel -->
         <div class="login-panel mc-panel">
           <h2 class="login-heading">Iniciar Sesión</h2>
 
@@ -59,7 +57,6 @@ import { environment } from '../../../environments/environment';
               <div class="mc-error">⚠ {{ error() }}</div>
             }
 
-            <!-- Microsoft OAuth — redirige al backend -->
             <button
               id="btn-microsoft"
               type="button"
@@ -115,7 +112,6 @@ import { environment } from '../../../environments/environment';
       max-width: 520px;
     }
 
-    /* Logo */
     .login-logo { text-align: center; }
     .logo-pickaxe {
       display: block;
@@ -132,7 +128,6 @@ import { environment } from '../../../environments/environment';
       letter-spacing: 0.12em;
     }
 
-    /* Panel */
     .login-panel { width: 100%; padding: 2.25rem 2rem; }
 
     .login-heading {
@@ -152,14 +147,12 @@ import { environment } from '../../../environments/environment';
 
     .field-group { display: flex; flex-direction: column; gap: 8px; }
 
-    /* Sobreescribe el tamaño base del mc-input para login */
     .login-panel .mc-input {
       font-size: 10px;
       padding: 14px 14px;
     }
     .login-panel .mc-label { font-size: 9px; }
 
-    /* Botón Microsoft con aspecto diferente (más neutro) */
     .ms-btn {
       background:
         linear-gradient(180deg,
@@ -215,7 +208,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Leer error que viene del backend tras fallo en OAuth Microsoft
     const err = this.route.snapshot.queryParamMap.get('error');
     const msg = this.route.snapshot.queryParamMap.get('msg');
     if (err) {
@@ -225,7 +217,6 @@ export class LoginComponent implements OnInit {
         microsoft_failed: 'Error al conectar con Microsoft.',
       };
       this.error.set(msg ? decodeURIComponent(msg) : (friendly[err] ?? `Error: ${err}`));
-      // Limpiar los query params de la URL sin recargar
       this.router.navigate([], { replaceUrl: true, queryParams: {} });
     }
   }
@@ -239,10 +230,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  /** Redirige al backend — el backend redirige a Microsoft y luego vuelve al callback */
   onMicrosoft(): void {
-    // Si el ClientID no está configurado, el backend devolverá 503 en JSON.
-    // El navegador va directamente al endpoint del backend.
     window.location.href = `${environment.apiUrl}/api/auth/microsoft`;
   }
 }
