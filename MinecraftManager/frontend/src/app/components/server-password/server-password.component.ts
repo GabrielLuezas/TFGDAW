@@ -134,6 +134,9 @@ import { AuthService } from '../../services/auth.service';
       font-size: 8px;
       padding: 8px 12px;
       white-space: nowrap;
+      flex-shrink: 0;
+      width: auto !important;
+      min-width: unset !important;
     }
 
     .sp-warning {

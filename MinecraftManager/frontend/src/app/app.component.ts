@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AuthService } from './services/auth.service';
@@ -45,9 +45,16 @@ import { AuthService } from './services/auth.service';
   `]
 })
 export class AppComponent {
-  auth = inject(AuthService);
+  auth   = inject(AuthService);
+  router = inject(Router);
+
+  /** Rutas que NO muestran sidebar */
+  private readonly noLayoutRoutes = ['/login', '/register', '/auth/', '/servers'];
 
   showLayout(): boolean {
-    return this.auth.isAuthenticated() && !!this.auth.activeServer();
+    const url = this.router.url;
+    const isExcluded = this.noLayoutRoutes.some(r => url.startsWith(r));
+    return !isExcluded && this.auth.isAuthenticated() && !!this.auth.activeServer();
   }
 }
+

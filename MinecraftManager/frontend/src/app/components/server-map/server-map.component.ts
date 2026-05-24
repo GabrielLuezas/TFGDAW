@@ -8,49 +8,39 @@ import { ApiService } from '../../services/api.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="h-full flex flex-col">
+    <div class="map-container">
       <!-- Header -->
-      <div class="flex justify-between items-center px-8 pt-6 pb-4">
-        <h2 class="text-4xl font-serif text-white">Mapa del Mundo</h2>
+      <div class="map-header">
+        <h2 class="map-title">Mapa del Mundo</h2>
         @if (mapUrl) {
-          <a [href]="rawUrl" target="_blank"
-             class="px-4 py-2 bg-[#2a2854] hover:bg-[#3a3874] border border-white/10 text-gray-300 hover:text-white rounded-lg text-sm transition-colors flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-            Abrir en nueva pestaña
+          <a [href]="rawUrl" target="_blank" class="map-link mc-btn mc-btn-small">
+            📌 Abrir en nueva pestaña
           </a>
         }
       </div>
 
       <!-- Map Container -->
-      <div class="flex-1 mx-8 mb-8 rounded-xl overflow-hidden border border-white/10 relative">
+      <div class="map-frame">
         @if (loading) {
-          <div class="absolute inset-0 flex items-center justify-center bg-[#1e1c3e]">
-            <div class="text-center">
-              <div class="text-4xl mb-4">🗺️</div>
-              <div class="text-gray-400">Cargando mapa...</div>
-            </div>
+          <div class="map-overlay">
+            <span class="map-overlay-icon">🗺️</span>
+            <span class="map-overlay-text">Cargando mapa...</span>
           </div>
         }
 
         @if (error) {
-          <div class="absolute inset-0 flex items-center justify-center bg-[#1e1c3e]">
-            <div class="text-center">
-              <div class="text-4xl mb-4">🚫</div>
-              <div class="text-red-400 text-lg mb-2">No se pudo cargar el mapa</div>
-              <div class="text-gray-500 text-sm max-w-md">
-                Asegúrate de que BlueMap está instalado y funcionando en el servidor.
-                El mapa debería estar disponible en el puerto 8100.
-              </div>
-            </div>
+          <div class="map-overlay">
+            <span class="map-overlay-icon">🚫</span>
+            <span class="map-overlay-text map-error-text">No se pudo cargar el mapa</span>
+            <span class="map-overlay-hint">
+              Asegúrate de que BlueMap está instalado y funcionando en el servidor.
+            </span>
           </div>
         }
 
         @if (mapUrl) {
           <iframe [src]="mapUrl"
-                  class="w-full h-full border-0"
+                  class="map-iframe"
                   allowfullscreen
                   loading="lazy"
                   (load)="onIframeLoad()"
@@ -62,6 +52,85 @@ import { ApiService } from '../../services/api.service';
   `,
   styles: [`
     :host { display: block; height: 100%; }
+
+    .map-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem 1rem;
+    }
+
+    .map-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 16px;
+      color: #fff;
+      text-shadow: 3px 3px #3f3f3f;
+      margin: 0;
+    }
+
+    .map-link {
+      font-size: 8px !important;
+      padding: 8px 14px !important;
+      text-decoration: none;
+      width: auto !important;
+      min-width: unset !important;
+    }
+
+    .map-frame {
+      flex: 1;
+      margin: 0 2rem 2rem;
+      border: 3px solid rgba(255,255,255,0.1);
+      background: #3b2d1e;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .map-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #3b2d1e;
+      gap: 12px;
+    }
+
+    .map-overlay-icon {
+      font-size: 48px;
+      opacity: 0.5;
+    }
+
+    .map-overlay-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: #888;
+    }
+
+    .map-error-text {
+      color: #ff5555;
+    }
+
+    .map-overlay-hint {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: #555;
+      text-align: center;
+      max-width: 360px;
+      line-height: 2;
+    }
   `]
 })
 export class ServerMapComponent implements OnInit {
