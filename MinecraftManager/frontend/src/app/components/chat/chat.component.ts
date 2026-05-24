@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { SocketService } from '../../services/socket.service';
+import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 
 interface ChatLog {
@@ -171,11 +172,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
     private apiService: ApiService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.socketService.connect();
+
+    // Si el usuario no es administrador, removemos el filtro de comandos
+    if (!this.authService.isAdmin()) {
+      this.filters = this.filters.filter(f => f.type !== 'command');
+    }
 
     this.sub.add(
       this.socketService.onEvent<any>('chat_message').subscribe(data => {
