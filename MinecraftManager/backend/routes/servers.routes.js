@@ -123,10 +123,30 @@ router.post("/", async (req, res) => {
       role,
     }).returning("id");
 
-    const server = await db("servers")
-      .select("id", "name", "ip", "api_host", "api_port", "ws_port", "role", "created_at")
+    const fullServer = await db("servers")
       .where({ id })
       .first();
+
+    // Conectar dinámicamente el WebSocket si el rol es admin
+    if (role === "admin") {
+      try {
+        const websocketService = require("../services/websocket.service");
+        websocketService.connectToServer(fullServer);
+      } catch (wsErr) {
+        console.error(`[Servers] Error al iniciar WebSocket para servidor #${id}:`, wsErr.message);
+      }
+    }
+
+    const server = {
+      id: fullServer.id,
+      name: fullServer.name,
+      ip: fullServer.ip,
+      api_host: fullServer.api_host,
+      api_port: fullServer.api_port,
+      ws_port: fullServer.ws_port,
+      role: fullServer.role,
+      created_at: fullServer.created_at
+    };
 
     return res.status(201).json({ server });
   } catch (err) {
@@ -205,13 +225,23 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const db = getDb();
   try {
+    const serverId = parseInt(req.params.id);
     const deleted = await db("servers")
-      .where({ id: req.params.id, user_id: req.user.id })
+      .where({ id: serverId, user_id: req.user.id })
       .delete();
 
     if (!deleted) {
       return res.status(404).json({ error: "Servidor no encontrado" });
     }
+
+    // Desconectar dinámicamente el WebSocket asociado
+    try {
+      const websocketService = require("../services/websocket.service");
+      websocketService.disconnectFromServer(serverId);
+    } catch (wsErr) {
+      console.error(`[Servers] Error al desconectar WebSocket para servidor #${serverId}:`, wsErr.message);
+    }
+
     return res.json({ message: "Servidor eliminado" });
   } catch (err) {
     console.error("[Servers] DELETE error:", err.message);

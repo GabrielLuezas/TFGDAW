@@ -22,16 +22,44 @@ async function getPluginBaseUrl(serverId, userId) {
 }
 
 /**
- * Crea un cliente axios configurado para un servidor específico.
- * @param {string} baseUrl - URL base del plugin
- * @param {string} token   - Token del plugin para autenticación
+ * Crea un cliente axios configurado para un servidor específico con interceptor de auto-recuperación local.
+ * @param {string} host   - Host principal
+ * @param {number} port   - Puerto de la API del plugin
+ * @param {string} token  - Token de autenticación del plugin
  */
-function createPluginClient(baseUrl, token) {
-  return axios.create({
-    baseURL: baseUrl,
-    timeout: 10000,
+function createPluginClient(host, port, token) {
+  const primaryUrl = `http://${host}:${port}/api`;
+  const fallbackUrl = `http://127.0.0.1:${port}/api`;
+
+  const client = axios.create({
+    baseURL: primaryUrl,
+    timeout: 8000,
     headers: { "X-Plugin-Token": token },
   });
+
+  // Interceptor para reintentar con 127.0.0.1 si falla el host principal
+  client.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const { config } = error;
+      // Si ya falló o si el host principal ya era localhost/127.0.0.1, no reintentamos
+      if (!config || config.__isRetry || host === "127.0.0.1" || host === "localhost") {
+        return Promise.reject(error);
+      }
+
+      // Solo reintentar en errores de red o timeouts
+      if (error.code === "ECONNABORTED" || error.code === "ECONNREFUSED" || !error.response) {
+        console.warn(`[Plugin API] Falló petición a ${config.baseURL}${config.url} (${error.message}). Reintentando en fallback local (127.0.0.1)...`);
+        config.__isRetry = true;
+        config.baseURL = fallbackUrl;
+        return axios(config);
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return client;
 }
 
 /**
@@ -49,8 +77,7 @@ async function getPluginClient(serverId, userId) {
 
   // Usa api_host si está definido; si no, usa ip (comportamiento anterior)
   const host = server.api_host || server.ip;
-  const baseUrl = `http://${host}:${server.api_port}/api`;
-  return createPluginClient(baseUrl, server.unique_token);
+  return createPluginClient(host, server.api_port, server.unique_token);
 }
 
 module.exports = {

@@ -55,20 +55,27 @@ function connectToServer(server) {
   const { id, ip, api_host, ws_port, unique_token } = server;
   // Usa api_host si está definido (ej: localhost para FeatherMC), si no usa ip
   const wsHost = api_host || ip;
-  const wsUrl = `ws://${wsHost}:${ws_port}`;
 
   if (connections.has(id)) {
     // Ya existe una conexión, no duplicar
     return;
   }
 
+  let useFallback = false;
+
   function connect() {
-    const ws = new WebSocket(wsUrl, {
+    const targetHost = useFallback ? "127.0.0.1" : wsHost;
+    const currentWsUrl = `ws://${targetHost}:${ws_port}`;
+
+    console.log(`[WS] Intentando conectar al servidor #${id} en ${currentWsUrl}...`);
+
+    const ws = new WebSocket(currentWsUrl, {
       headers: { "X-Plugin-Token": unique_token },
+      handshakeTimeout: 5000, // Timeout rápido para fallar y probar fallback rápido
     });
 
     ws.on("open", () => {
-      console.log(`[WS] Conectado al servidor #${id} (${wsUrl})`);
+      console.log(`[WS] Conectado con éxito al servidor #${id} (${currentWsUrl})`);
       connections.set(id, ws);
     });
 
@@ -83,13 +90,20 @@ function connectToServer(server) {
     });
 
     ws.on("close", () => {
-      console.log(`[WS] Desconectado del servidor #${id}. Reconectando en 5s...`);
+      console.log(`[WS] Conexión cerrada con el servidor #${id}.`);
       connections.delete(id);
       setTimeout(connect, 5000);
     });
 
     ws.on("error", (err) => {
-      console.error(`[WS] Error en servidor #${id}:`, err.message);
+      console.error(`[WS] Error de conexión en servidor #${id} (${currentWsUrl}):`, err.message);
+      // Si falló el host principal, intentamos el fallback local en el siguiente intento
+      if (!useFallback && targetHost !== "127.0.0.1" && targetHost !== "localhost") {
+        console.log(`[WS] Servidor #${id} falló con el host principal. Probando fallback local (127.0.0.1)...`);
+        useFallback = true;
+      } else {
+        useFallback = false;
+      }
       ws.close();
     });
   }
